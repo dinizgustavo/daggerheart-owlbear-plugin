@@ -2,7 +2,7 @@
   "id": "daggerheart.plugin",
   "title": "Daggerheart Toolkit",
   "description": "Duality Dice, Standard Dice, Fear Tracker",
-  "entry": "https://daggerheart-owlbear-plugin.vercel.app/",
+  "entry": "https://daggerheart-owlbear-plugin.vercel.app/extension",
   "version": "1.0.0",
   "author": "Gustavo Diniz"
 }
