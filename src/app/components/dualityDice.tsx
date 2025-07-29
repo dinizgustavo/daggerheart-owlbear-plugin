@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { motion, useAnimation } from "motion/react";
 import { useTheme } from "../contexts/ThemeContext";
 
 const rollD12 = () => Math.ceil(Math.random() * 12);
@@ -25,50 +25,58 @@ export default function DualityDice() {
   const hopeControls = useAnimation();
   const fearControls = useAnimation();
 
-  const rollDice = useCallback(async () => {
+  const rollDice = useCallback(() => {
     if (isRolling) return;
 
-    try {
-      setIsRolling(true);
-      setCritical(false);
+    setIsRolling(true);
+    setCritical(false);
 
-      const animation = {
-        rotateY: [0, 1080],
-        transition: {
-          duration: 1.5,
-          ease: [0.6, 0.01, -0.05, 0.95],
-        },
-      };
+    // Remover await do stop pois pode ser sync
+    hopeControls.stop();
+    fearControls.stop();
 
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Animation timeout")), 3000)
-      );
+    // Animação
+    const animation = {
+      rotateY: 1080,
+      rotateX: 720,
+      transition: {
+        duration: 1.5,
+        easing: "ease-out",
+      },
+    };
 
-      const animationPromise = Promise.all([
-        hopeControls.start(animation),
-        fearControls.start(animation),
-      ]);
+    // Rolagem dos dados
+    const hopeRoll = rollD12();
+    const fearRoll = rollD12();
 
-      const hopeRoll = rollD12();
-      const fearRoll = rollD12();
+    // Start animações (sem await)
+    hopeControls.start(animation);
+    fearControls.start(animation);
 
-      await Promise.race([animationPromise, timeoutPromise]);
-
+    // Depois do tempo da animação, atualizamos valores e resetamos rotações
+    setTimeout(() => {
       setHope(hopeRoll);
       setFear(fearRoll);
-      hopeControls.set({ rotateY: 0 });
-      fearControls.set({ rotateY: 0 });
 
       if (hopeRoll === fearRoll) setCritical(true);
-    } catch (error) {
-      console.error("Error rolling dice:", error);
-      hopeControls.stop();
-      fearControls.stop();
-      hopeControls.set({ rotateY: 0 });
-      fearControls.set({ rotateY: 0 });
-    } finally {
-      setIsRolling(false);
-    }
+
+      // Resetar rotação suavemente
+      hopeControls.start({
+        rotateY: 0,
+        rotateX: 0,
+        transition: { duration: 0.5 },
+      });
+      fearControls.start({
+        rotateY: 0,
+        rotateX: 0,
+        transition: { duration: 0.5 },
+      });
+
+      // Depois do reset, libera botão
+      setTimeout(() => {
+        setIsRolling(false);
+      }, 500);
+    }, 1500);
   }, [isRolling, hopeControls, fearControls]);
 
   const hopeColor = isDark
