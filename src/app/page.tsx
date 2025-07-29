@@ -1,4 +1,4 @@
-import Extension from "./pages/extension";
+import Extension from "./extension/page";
 
 export default function Page() {
   return <Extension />;
