@@ -1,36 +1,26 @@
 "use client";
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
+import DualityDice from "@/app/components/dualityDice";
+import { useTheme } from "../contexts/ThemeContext";
 
 export default function Extension() {
-  const [lightDie, setLightDie] = useState<number | null>(null)
-  const [darkDie, setDarkDie] = useState<number | null>(null)
-
-  const rollDie = () => Math.ceil(Math.random() * 6)
-
-  const rollDuality = () => {
-    setLightDie(rollDie())
-    setDarkDie(rollDie())
-  }
-
-  const dominant = () => {
-    if (lightDie === null || darkDie === null) return null
-    if (lightDie > darkDie) return 'Light'
-    if (darkDie > lightDie) return 'Dark'
-    return 'Dark (tie)'
-  }
+  const { isDark } = useTheme();
 
   return (
-    <main style={{ padding: 24, fontFamily: 'sans-serif' }}>
-      <h1>Daggerheart Toolkit</h1>
-
-      <section>
-        <h2>Duality Dice</h2>
-        <button onClick={rollDuality}>Roll Duality</button>
-        <p>Light Die: {lightDie}</p>
-        <p>Dark Die: {darkDie}</p>
-        {dominant() && <p>Dominant: <strong>{dominant()}</strong></p>}
-      </section>
+    <main
+      className={`min-h-screen ${
+        isDark ? "bg-gray-900" : "bg-gray-50"
+      } py-16 px-8`}
+    >
+      <h1
+        className={`text-center text-4xl font-extrabold mb-12 ${
+          isDark ? "text-white" : "text-gray-900"
+        }`}
+      >
+        Daggerheart Toolkit
+      </h1>
+      <DualityDice />
     </main>
-  )
+  );
 }
