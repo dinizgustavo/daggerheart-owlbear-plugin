@@ -17,7 +17,7 @@ export default function DiceIcon({
   onClick,
   value,
 }: DiceIconProps) {
-  const diceMap: Record<string, TSX.Element> = {
+  const diceMap: Record<string, JSX.Element> = {
     d4: (
       <polygon
         points="50,5 95,90 5,90"
