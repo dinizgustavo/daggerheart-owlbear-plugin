@@ -52,7 +52,7 @@ export default function DiceRoller() {
         </button>
 
         <div className="relative">
-          <DiceIcon type={selectedDice} size={100} />
+          <DiceIcon type={selectedDice} size={100} value={null} />
           <span className="absolute -bottom-3 right-1 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full shadow">
             x{quantity}
           </span>

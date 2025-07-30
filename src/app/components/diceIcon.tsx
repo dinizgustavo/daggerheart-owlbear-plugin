@@ -1,4 +1,3 @@
-// components/DiceIcon.tsx
 import React from "react";
 import { motion } from "motion/react";
 
@@ -7,7 +6,7 @@ interface DiceIconProps {
   size?: number;
   color?: string;
   onClick?: () => void;
-  value?: number | null; // Optional value for displaying the rolled number
+  value?: number | null;
 }
 
 export default function DiceIcon({
@@ -17,7 +16,8 @@ export default function DiceIcon({
   onClick,
   value,
 }: DiceIconProps) {
-  const diceMap: Record<string, JSX.Element> = {
+  // Troquei JSX.Element por React.ReactNode aqui:
+  const diceMap: Record<string, React.ReactNode> = {
     d4: (
       <polygon
         points="50,5 95,90 5,90"
@@ -78,20 +78,12 @@ export default function DiceIcon({
       </>
     ),
     d100: (
-      <>
-        <polygon
-          points="50,5 90,35 75,90 25,90 10,35"
-          fill={color}
-          stroke="#000"
-          strokeWidth="2"
-        />
-        <polygon
-          points="130,5 170,35 155,90 105,90 90,35"
-          fill="#bbbbbb"
-          stroke="#000"
-          strokeWidth="2"
-        />
-      </>
+      <polygon
+        points="50,5 95,50 50,95 5,50"
+        fill={color}
+        stroke="#000"
+        strokeWidth="2"
+      />
     ),
   };
 
@@ -106,8 +98,7 @@ export default function DiceIcon({
       className="cursor-pointer transition-all"
     >
       {diceMap[type]}
-      {/* Adicione o número aqui */}
-      {value !== null && (
+      {typeof value === "number" && (
         <text
           x="50"
           y="55"
