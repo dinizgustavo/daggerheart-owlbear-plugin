@@ -2,7 +2,7 @@
 
 import { useTheme } from "../contexts/ThemeContext";
 
-export default function darkSwitch() {
+export default function DarkSwitch() {
   const { isDark, toggleTheme } = useTheme();
 
   return (

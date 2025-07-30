@@ -10,7 +10,7 @@ import { useTheme } from "../contexts/ThemeContext";
 import DiceTokenBar from "../components/diceTokenBar";
 import { useTrackerStore } from "@/stores/useTrackerStore";
 
-export default function tracker() {
+export default function Tracker() {
   const { isDark } = useTheme();
   const { mode } = useTrackerStore();
 

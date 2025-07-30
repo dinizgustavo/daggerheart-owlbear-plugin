@@ -36,7 +36,7 @@ export default function MasterDice() {
       bg-white dark:bg-gradient-to-br dark:from-zinc-900 dark:to-zinc-800
       text-zinc-900 dark:text-zinc-100 shadow-xl dark:shadow-zinc-900 border border-zinc-200 dark:border-zinc-700 transition"
     >
-      <h2 className="text-3xl font-extrabold mb-6">Master's D20</h2>
+      <h2 className="text-3xl font-extrabold mb-6">Master D20</h2>
 
       <button
         onClick={handleRoll}
