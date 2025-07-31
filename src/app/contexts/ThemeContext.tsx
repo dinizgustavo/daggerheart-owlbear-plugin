@@ -2,13 +2,11 @@
 
 import { createContext, useState, useContext } from "react";
 
-// 1. Criar o contexto
 const ThemeContext = createContext({
   isDark: false,
   toggleTheme: () => {},
 });
 
-// 2. Criar o Provider (a "rádio")
 import type { PropsWithChildren } from "react";
 
 export function ThemeProvider({ children }: PropsWithChildren) {

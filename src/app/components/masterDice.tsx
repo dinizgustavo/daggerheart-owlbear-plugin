@@ -1,70 +1,133 @@
 "use client";
 
 import { useState } from "react";
-import DiceIcon from "./diceIcon";
-import { DiceAnimator } from "./diceAnimator";
-
-const rollD20 = () => Math.ceil(Math.random() * 20);
+import { motion } from "framer-motion";
+import { useTheme } from "../contexts/ThemeContext";
+import { Die } from "./die";
+import ColorPicker from "./colorPicker";
 
 export default function MasterDice() {
-  const [result, setResult] = useState<number | null>(null);
+  const { isDark } = useTheme();
+
+  const [diceColors, setDiceColors] = useState({
+    fill: isDark ? "#1F2937" : "#F3F4F6", // cinza escuro / cinza claro
+    edge: isDark ? "#9CA3AF" : "#4B5563", // cinza médio / cinza escuro
+    text: isDark ? "#F9FAFB" : "#111827", // quase branco / quase preto
+    outline: isDark ? "#000000" : "#FFFFFF", // preto / branco
+  });
+
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [rollResult, setRollResult] = useState<number | null>(null);
   const [isRolling, setIsRolling] = useState(false);
-  const [isCritical, setIsCritical] = useState(false);
 
-  const handleRoll = async () => {
+  const updateDiceColor = (key: keyof typeof diceColors, value: string) => {
+    setDiceColors((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const rollMasterDice = () => {
     if (isRolling) return;
-
     setIsRolling(true);
-    setIsCritical(false);
+    setRollResult(null);
 
-    const roll = rollD20();
-
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    setResult(roll);
-
-    if (roll === 20 || roll === 1) {
-      setIsCritical(true);
-    }
-
-    setIsRolling(false);
+    setTimeout(() => {
+      const roll = Math.ceil(Math.random() * 20);
+      setRollResult(roll);
+      setIsRolling(false);
+    }, 800);
   };
 
   return (
-    <div
-      className="rounded-3xl p-8 max-w-md mx-auto text-center select-none
-      bg-white dark:bg-gradient-to-br dark:from-zinc-900 dark:to-zinc-800
-      text-zinc-900 dark:text-zinc-100 shadow-xl dark:shadow-zinc-900 border border-zinc-200 dark:border-zinc-700 transition"
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className={`rounded-3xl p-8 max-w-md mx-auto text-center select-none
+        ${
+          isDark
+            ? "bg-gradient-to-br from-zinc-900 to-zinc-800 text-zinc-100 border-zinc-700"
+            : "bg-white text-zinc-900 border-zinc-200"
+        }
+        shadow-xl border transition`}
     >
       <h2 className="text-3xl font-extrabold mb-6">Master D20</h2>
 
-      <button
-        onClick={handleRoll}
-        disabled={isRolling}
-        className="mb-6 px-6 py-3 bg-indigo-500 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-500
-        text-white rounded-xl font-semibold transition disabled:opacity-50"
-      >
-        {isRolling ? "Rolling..." : "Roll D20"}
-      </button>
+      {/* Botões abaixo do título */}
+      <div className="flex justify-center gap-4 mb-6">
+        <button
+          onClick={rollMasterDice}
+          disabled={isRolling}
+          className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold transition disabled:opacity-50"
+        >
+          {isRolling ? "Rolling..." : "Roll Master D20"}
+        </button>
 
-      <div className="flex justify-center">
-        {/* <DiceAnimator isRolling={isRolling}>
-          <DiceIcon type="d20" size={96} color="#4A5568" value={result} />
-        </DiceAnimator> */}
-        <DiceIcon type="d20" size={96} color="#4A5568" value={result} />
+        {/* <button
+          onClick={() => setShowColorPicker(!showColorPicker)}
+          className="px-4 py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-xl font-semibold transition"
+          aria-label="Change dice colors"
+        >
+          🎨
+        </button> */}
       </div>
 
-      {result && isCritical && (
+      {/* Seletor de cores em linha */}
+      {/* {showColorPicker && (
+        <div className="flex justify-center gap-6 mb-6 max-w-lg mx-auto">
+          <ColorPicker
+            label="Fill"
+            color={diceColors.fill}
+            onChange={(c) => updateDiceColor("fill", c)}
+          />
+          <ColorPicker
+            label="Edge"
+            color={diceColors.edge}
+            onChange={(c) => updateDiceColor("edge", c)}
+          />
+          <ColorPicker
+            label="Text"
+            color={diceColors.text}
+            onChange={(c) => updateDiceColor("text", c)}
+          />
+          <ColorPicker
+            label="Outline"
+            color={diceColors.outline}
+            onChange={(c) => updateDiceColor("outline", c)}
+          />
+        </div>
+      )} */}
+
+      {/* Dado */}
+      <Die
+        sides={20}
+        size={150}
+        baseColor={diceColors.fill}
+        edgeColor={diceColors.edge}
+        textColor={diceColors.text}
+        textOutlineColor={diceColors.outline}
+        hideButton
+        customValue={rollResult}
+        isRolling={isRolling}
+      />
+
+      {/* Resultado */}
+      {rollResult !== null && (
         <p
-          className={`mt-8 text-2xl font-bold transition ${
-            result === 20
-              ? "text-green-600 dark:text-green-400"
-              : "text-red-600 dark:text-red-400"
+          className={`mt-6 text-2xl font-bold ${
+            rollResult === 20
+              ? "text-green-500"
+              : rollResult === 1
+              ? "text-red-600"
+              : isDark
+              ? "text-gray-300"
+              : "text-gray-800"
           }`}
         >
-          {result === 20 ? "🎯 Critical Success!" : "💥 Critical Failure!"}
+          {rollResult === 20
+            ? "🎉 Critical Hit!"
+            : rollResult === 1
+            ? "💀 Critical Fail!"
+            : `Result: ${rollResult}`}
         </p>
       )}
-    </div>
+    </motion.div>
   );
 }

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import DualityDice from "@/app/components/dualityDice";
 import MasterDice from "@/app/components/masterDice";
 import ModeSwitch from "@/app/components/modeSwitch";
-import DiceRoller from "@/app/components/diceRoller";
+import DiceBar from "@/app/components/diceBar";
 import DarkSwitch from "@/app/components/darkSwitch";
 import { useTheme } from "../contexts/ThemeContext";
 import DiceTokenBar from "../components/diceTokenBar";
@@ -37,7 +37,7 @@ export default function Tracker() {
         <div className="flex flex-col items-center gap-6">
           {mode === "PLAYER" ? <DualityDice /> : <MasterDice />}
           <DiceTokenBar />
-          <DiceRoller />
+          <DiceBar />
         </div>
       </div>
     </main>
