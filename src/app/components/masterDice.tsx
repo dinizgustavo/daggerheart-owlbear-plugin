@@ -10,10 +10,8 @@ export default function MasterDice() {
   const { isDark } = useTheme();
 
   const [diceColors, setDiceColors] = useState({
-    fill: isDark ? "#1F2937" : "#F3F4F6", // cinza escuro / cinza claro
-    edge: isDark ? "#9CA3AF" : "#4B5563", // cinza médio / cinza escuro
+    fill: isDark ? "#FFFFFF" : "#F3F4F6", // cinza escuro / cinza claro
     text: isDark ? "#F9FAFB" : "#111827", // quase branco / quase preto
-    outline: isDark ? "#000000" : "#FFFFFF", // preto / branco
   });
 
   const [showColorPicker, setShowColorPicker] = useState(false);
@@ -60,49 +58,46 @@ export default function MasterDice() {
           {isRolling ? "Rolling..." : "Roll Master D20"}
         </button>
 
-        {/* <button
+        <button
           onClick={() => setShowColorPicker(!showColorPicker)}
           className="px-4 py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-xl font-semibold transition"
           aria-label="Change dice colors"
         >
           🎨
-        </button> */}
+        </button>
       </div>
 
-      {/* Seletor de cores em linha */}
-      {/* {showColorPicker && (
+      {showColorPicker && (
         <div className="flex justify-center gap-6 mb-6 max-w-lg mx-auto">
           <ColorPicker
             label="Fill"
             color={diceColors.fill}
             onChange={(c) => updateDiceColor("fill", c)}
           />
-          <ColorPicker
+          {/* <ColorPicker
             label="Edge"
             color={diceColors.edge}
             onChange={(c) => updateDiceColor("edge", c)}
-          />
+          /> */}
           <ColorPicker
             label="Text"
             color={diceColors.text}
             onChange={(c) => updateDiceColor("text", c)}
           />
-          <ColorPicker
+          {/* <ColorPicker
             label="Outline"
             color={diceColors.outline}
             onChange={(c) => updateDiceColor("outline", c)}
-          />
+          /> */}
         </div>
-      )} */}
+      )}
 
-      {/* Dado */}
       <Die
         sides={20}
         size={150}
         baseColor={diceColors.fill}
-        edgeColor={diceColors.edge}
+        // edgeColor={diceColors.edge}
         textColor={diceColors.text}
-        textOutlineColor={diceColors.outline}
         hideButton
         customValue={rollResult}
         isRolling={isRolling}

@@ -8,6 +8,8 @@ import { useTheme } from "../contexts/ThemeContext";
 interface DieProps {
   sides: 4 | 6 | 8 | 10 | 12 | 20;
   size?: number;
+  smSize?: number;
+  mdSize?: number;
   onRoll?: (result: number) => void;
   color?: string;
   baseColor?: string;
@@ -60,20 +62,22 @@ export const Die = ({
   const resolvedBaseColor = baseColor ?? (isDark ? "#1F2937" : "#E5E7EB"); // fundo do dado
   const resolvedEdgeColor = edgeColor ?? (isDark ? "#9CA3AF" : "#374151"); // borda do dado
   const resolvedTextColor = textColor ?? (isDark ? "#F9FAFB" : "#111827"); // número do dado
-  const resolvedTextOutlineColor =
-    textOutlineColor ?? (isDark ? "#000000" : "#FFFFFF"); // contorno texto
 
   return (
     <div className="flex flex-col items-center gap-3">
       <DiceAnimation isRolling={isRolling || externalRolling}>
         <div className="relative" style={{ width: size, height: size }}>
-          <img
-            src={`/dice/d${sides}.svg`}
-            alt={`D${sides}`}
+          <div
             style={{
-              width: "100%",
-              height: "100%",
-              filter: `invert(${isDark ? 0 : 1})`, // Simples inversão se necessário
+              width: size,
+              height: size,
+              backgroundColor: resolvedBaseColor,
+              WebkitMaskImage: `url(/dice/d${sides}.svg)`,
+              WebkitMaskRepeat: "no-repeat",
+              WebkitMaskSize: "contain",
+              maskImage: `url(/dice/d${sides}.svg)`,
+              maskRepeat: "no-repeat",
+              maskSize: "contain",
             }}
           />
           {value !== null && (
@@ -82,8 +86,6 @@ export const Die = ({
               style={{
                 fontSize: size / 3,
                 color: resolvedTextColor,
-                WebkitTextStroke: `1px ${resolvedTextOutlineColor}`,
-                textShadow: `1px 1px 2px ${resolvedTextOutlineColor}`,
               }}
             >
               {value}

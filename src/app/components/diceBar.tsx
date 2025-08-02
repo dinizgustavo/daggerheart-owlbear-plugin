@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTheme } from "../contexts/ThemeContext";
 import { Die } from "./die";
 import { motion } from "framer-motion";
+import TokenButton from "./tokenButton";
 
 type DiceType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
 
@@ -14,44 +15,6 @@ interface TokenButtonProps {
   disabled: boolean;
   isDark: boolean;
   children: React.ReactNode;
-}
-
-function TokenButton({
-  onClick,
-  disabled,
-  isDark,
-  children,
-}: TokenButtonProps) {
-  const baseBg = disabled
-    ? isDark
-      ? "bg-zinc-600 cursor-not-allowed"
-      : "bg-gray-300 cursor-not-allowed"
-    : "bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 cursor-pointer";
-
-  const redBg = disabled
-    ? isDark
-      ? "bg-zinc-600 cursor-not-allowed"
-      : "bg-gray-300 cursor-not-allowed"
-    : "bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 cursor-pointer";
-
-  const bgClass = children === "–" ? redBg : baseBg;
-
-  return (
-    <motion.button
-      onClick={disabled ? undefined : onClick}
-      disabled={disabled}
-      whileTap={!disabled ? { scale: 0.9 } : undefined}
-      className={`
-        w-10 h-10 sm:w-12 sm:h-12 rounded-full text-white font-bold text-xl sm:text-2xl
-        shadow ${bgClass} transition-colors duration-300 flex items-center justify-center
-        select-none
-      `}
-      aria-disabled={disabled}
-      type="button"
-    >
-      {children}
-    </motion.button>
-  );
 }
 
 export default function DiceBar() {
@@ -66,10 +29,8 @@ export default function DiceBar() {
   >([]);
 
   // Cores base para dados ajustadas para dark/light mode
-  const baseColor = isDark ? "#1F2937" : "#E5E7EB"; // fundo do dado
-  const edgeColor = isDark ? "#9CA3AF" : "#374151"; // borda do dado
+  const baseColor = isDark ? "#FFFFFF" : "#000000"; // fundo do dado
   const textColor = isDark ? "#F9FAFB" : "#111827"; // número do dado
-  const textOutline = isDark ? "#000000" : "#FFFFFF"; // contorno texto
 
   // Função para rolar vários dados e devolver array de resultados
   const rollDice = (dice: DiceType, qty: number): number[] => {
@@ -133,9 +94,7 @@ export default function DiceBar() {
               sides={d === 100 ? 10 : d}
               size={48}
               baseColor={baseColor}
-              edgeColor={edgeColor}
               textColor={textColor}
-              textOutlineColor={textOutline}
               hideButton
               customValue={null}
               isRolling={false}
@@ -188,9 +147,7 @@ export default function DiceBar() {
               sides={selectedDice === 100 ? 10 : selectedDice!}
               size={64}
               baseColor={baseColor}
-              edgeColor={edgeColor}
               textColor={textColor}
-              textOutlineColor={textOutline}
               customValue={result}
               hideButton
               isRolling={false}
